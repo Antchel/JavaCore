@@ -19,7 +19,7 @@ public class Main {
     }
 
     public static void secondTask() {
-        Magicnumber tst = new Magicnumber();
-        tst.StartGame();
+        Magicnumber game = new Magicnumber();
+        game.StartGame();
     }
 }
