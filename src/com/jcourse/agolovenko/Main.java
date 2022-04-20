@@ -1,25 +1,19 @@
 package com.jcourse.agolovenko;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
+import com.jcourse.agolovenko.lesson1.Echo;
+import com.jcourse.agolovenko.lesson1.Magicnumber;
+
+import java.io.*;
 
 public class Main {
 
-    public static void main(String[] args) throws UnsupportedEncodingException {
-        firstTask();
-        secondTask();
-    }
+    public static void main(String[] args) throws IOException {
 
-    public static void firstTask() throws UnsupportedEncodingException {
-        Scanner console = new Scanner(System.in);
-        System.out.println(System.getProperty("file.encoding"));
-        String str = new String(console.nextLine().getBytes(StandardCharsets.UTF_8), System.getProperty("file.encoding"));
-        System.out.println(str);
-    }
+        Echo echo = new Echo();
+        echo.ExecuteEcho();
 
-    public static void secondTask() {
         Magicnumber game = new Magicnumber();
         game.StartGame();
+
     }
 }
