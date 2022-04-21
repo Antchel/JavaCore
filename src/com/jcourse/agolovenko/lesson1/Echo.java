@@ -1,7 +1,6 @@
 package com.jcourse.agolovenko.lesson1;
 
-import java.io.Console;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.Scanner;
 
 /**
@@ -12,15 +11,17 @@ public class Echo {
     /**
      * Waiting for user input and send this data to console
      */
-    public void executeEcho() throws UnsupportedEncodingException {
-        Console console = System.console();
-        Scanner keyboard = new Scanner(System.in);
-        if (console != null) {
-            System.out.println(console.charset().name());
-            String str = new String(keyboard.nextLine().getBytes(System.getProperty("file.encoding")), console.charset().name());
-            System.out.println(str);
+    public void executeEcho() throws IOException {
+
+        if (System.console() != null) {
+            byte[] byteStr;
+            System.out.println(System.console().charset().name());
+            byteStr = System.console().readLine().getBytes(System.console().charset().name());
+            System.out.println(new String(byteStr,System.console().charset().name()));
         } else {
-            System.out.println(keyboard.nextLine());
+            System.out.println(System.getProperty("file.encoding"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println(br.readLine());
         }
     }
 }
