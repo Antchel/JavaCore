@@ -9,7 +9,10 @@ import java.util.Scanner;
  * Echo class implement displaying User input from Console or IDE terminal
  */
 public class Echo {
-    public void ExecuteEcho() throws UnsupportedEncodingException {
+    /**
+     * Waiting for user input and send this data to console
+     */
+    public void executeEcho() throws UnsupportedEncodingException {
         Console console = System.console();
         Scanner keyboard = new Scanner(System.in);
         if (console != null) {

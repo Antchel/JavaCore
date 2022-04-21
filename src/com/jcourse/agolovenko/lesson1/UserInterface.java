@@ -2,7 +2,7 @@ package com.jcourse.agolovenko.lesson1;
 
 import java.util.Scanner;
 
-import static com.jcourse.agolovenko.lesson1.Magicnumber.*;
+import static com.jcourse.agolovenko.lesson1.MagicNumber.*;
 
 public class UserInterface {
     public static int userInput;
@@ -19,7 +19,7 @@ public class UserInterface {
      *
      * @return User number.
      */
-    public int GetUserInput() {
+    public int getUserInput() {
         System.out.println("Enter your number ");
         Scanner console = new Scanner(System.in);
         if (console.hasNextInt()) {
@@ -36,7 +36,7 @@ public class UserInterface {
      *
      * @param code You should pass here Integer.compare() result
      */
-    public void SendNotifyByCode(int code) {
+    public void sendNotifyByCode(int code) {
         switch (code) {
             case 1 -> System.out.println("Magic number is less");
             case -1 -> System.out.println("Magic number is greater");
@@ -49,7 +49,7 @@ public class UserInterface {
      *
      * @param magicNumber Pass a number which user should guess
      */
-    public void SendNotifyLoseGame(int magicNumber) {
+    public void sendNotifyLoseGame(int magicNumber) {
         System.out.println("You are loose. Magic number was " + magicNumber);
     }
 }
