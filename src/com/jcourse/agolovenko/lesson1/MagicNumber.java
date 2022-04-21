@@ -7,11 +7,11 @@ public class MagicNumber {
     private int attemptsCount = 0;
     private boolean IsRight = false;
     private final int magicNumber = (int) (Math.random() * UPPER_LIMIT) + LOWER_LIMIT;
-    UserInterface UI;
+    IUserInterface UI;
     /**
      * Begin the guessing magic number game.
      */
-    public MagicNumber(UserInterface UI) {
+    public MagicNumber(IUserInterface UI) {
         this.UI = UI;
     }
     public void startGame() {

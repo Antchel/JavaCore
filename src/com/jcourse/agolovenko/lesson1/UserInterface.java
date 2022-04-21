@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import static com.jcourse.agolovenko.lesson1.MagicNumber.*;
 
-public class UserInterface {
+public class UserInterface implements IUserInterface {
     private int userInput;
 
     /**
