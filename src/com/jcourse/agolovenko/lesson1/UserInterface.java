@@ -25,7 +25,7 @@ public class UserInterface {
         if (console.hasNextInt()) {
             userInput = console.nextInt();
             if (userInput > UPPER_LIMIT || userInput < LOWER_LIMIT) {
-                System.out.println("Wrong range! Hint: the number is places between 1 and 100");
+                System.out.println("Wrong range! Hint: the number is places between " + LOWER_LIMIT + " and " + UPPER_LIMIT);
             }
         }
         return userInput;
