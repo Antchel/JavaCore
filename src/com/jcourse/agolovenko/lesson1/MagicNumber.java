@@ -7,12 +7,14 @@ public class MagicNumber {
     private int attemptsCount = 0;
     private boolean IsRight = false;
     private final int magicNumber = (int) (Math.random() * UPPER_LIMIT) + LOWER_LIMIT;
-
+    UserInterface UI;
     /**
      * Begin the guessing magic number game.
      */
+    public MagicNumber(UserInterface UI) {
+        this.UI = UI;
+    }
     public void startGame() {
-        UserInterface UI = new UserInterface();
         while (attemptsCount < ATTEMPTS_LIMIT && !IsRight) {
             attemptsCount++;
 

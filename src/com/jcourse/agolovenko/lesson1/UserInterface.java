@@ -10,7 +10,7 @@ public class UserInterface {
     /**
      * Notify user that game has been started.
      */
-    UserInterface() {
+    public UserInterface() {
         System.out.println(" Let's play in Magic number game.\n You have " + ATTEMPTS_LIMIT + " attempts to guess the magic number");
     }
 
