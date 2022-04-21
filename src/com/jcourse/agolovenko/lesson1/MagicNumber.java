@@ -7,7 +7,7 @@ public class MagicNumber {
     private int attemptsCount = 0;
     private boolean IsRight = false;
     private final int magicNumber = (int) (Math.random() * UPPER_LIMIT) + LOWER_LIMIT;
-    IUserInterface UI;
+    final IUserInterface  UI;
     /**
      * Begin the guessing magic number game.
      */
