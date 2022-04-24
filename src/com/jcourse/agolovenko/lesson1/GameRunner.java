@@ -1,12 +1,8 @@
-package com.jcourse.agolovenko;
-
-import com.jcourse.agolovenko.lesson1.Echo;
-import com.jcourse.agolovenko.lesson1.MagicNumber;
-import com.jcourse.agolovenko.lesson1.UserInterface;
+package com.jcourse.agolovenko.lesson1;
 
 import java.io.*;
 
-public class Main {
+public class GameRunner {
 
     public static void main(String[] args) throws IOException {
 
