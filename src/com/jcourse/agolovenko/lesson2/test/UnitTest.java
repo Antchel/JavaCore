@@ -52,7 +52,8 @@ public class UnitTest {
             // 4ac
             inv.invoke(calculator, new String[]{"push", "4"});
             inv.invoke(calculator, new String[]{"push", "a"});
-            inv.invoke(calculator, new String[]{"push", "с"});
+            inv.invoke(calculator, new String[]{"*"});
+            inv.invoke(calculator, new String[]{"push", "c"});
             inv.invoke(calculator, new String[]{"*"});
             // b^2-4ac
             inv.invoke(calculator, new String[]{"-"});
@@ -81,6 +82,6 @@ public class UnitTest {
         evaluateSqrtRoots(calculator, 1., 2., 1.);
         evaluateSqrtRoots(calculator, 0., 0., 0.);
         evaluateSqrtRoots(calculator, 0., -10., 50.);
-        evaluateSqrtRoots(calculator, -1., -2., 6.);
+        evaluateSqrtRoots(calculator, 1., 0., -16.);
         }
 }
