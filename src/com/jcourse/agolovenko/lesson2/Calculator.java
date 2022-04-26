@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Scanner;
 
-public class UserInterface {
+public class Calculator {
 
     public static void main(String[] args) {
         ALU calculator = new ALU();
