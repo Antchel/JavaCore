@@ -19,11 +19,12 @@ public class CommandPool {
         commandMap.put("print", PrintCommand.class);
     }
 
-    public static Class<? extends Command> getCommandByName(String name) {
+    public static Class<? extends Command> getCommandByName(String name) throws NoSuchMethodException{
         if (commandMap.containsKey(name.toLowerCase()))
             return commandMap.get(name.toLowerCase());
-
-        return null;
+        else {
+            throw new NoSuchMethodException("Couldn't find such command in command pool.");
+        }
     }
 
     /* For new calculator commands */

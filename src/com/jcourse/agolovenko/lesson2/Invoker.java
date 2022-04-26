@@ -1,10 +1,9 @@
 package com.jcourse.agolovenko.lesson2;
 
-import com.jcourse.agolovenko.lesson2.commands.*;
+import com.jcourse.agolovenko.lesson2.commands.Command;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class Invoker {
 
@@ -13,9 +12,12 @@ public class Invoker {
             InvocationTargetException, InstantiationException, IllegalAccessException {
 
         String[] params = Arrays.copyOfRange(parameters, 1, parameters.length);
-        Command command = (Objects.requireNonNull(CommandPool.getCommandByName(parameters[0]))).
-                getConstructor(ALU.class, String[].class).newInstance(calculator, params);
-        command.execute();
+        try {
+            Command command = ((CommandPool.getCommandByName(parameters[0]))).getConstructor(ALU.class, String[].class).newInstance(calculator, params);
+            command.execute();
+        } catch (NoSuchMethodException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }
