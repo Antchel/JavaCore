@@ -1,28 +1,23 @@
 package com.jcourse.agolovenko.lesson2;
 
 import com.jcourse.agolovenko.lesson2.commands.Command;
+import com.jcourse.agolovenko.lesson2.datamanagers.ConsoleManager;
+import com.jcourse.agolovenko.lesson2.datamanagers.IDataManager;
 import com.jcourse.agolovenko.lesson2.parser.Parser;
 import com.jcourse.agolovenko.lesson2.parser.RPNParser;
-import com.jcourse.agolovenko.lesson2.test.UnitTest;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-public class Client {
-    private final CommandInvoker invoker;
-    public final CommandFactory factory;
+public record Client(CommandInvoker invoker,
+                     CommandFactory factory) {
 
-    public Client(ICalculator calc, CommandInvoker invoker, CommandFactory factory) {
-        this.invoker = invoker;
-        this.factory = factory;
-    }
-
-    private String[] denoteExpression(String expression){
+    private String[] denoteExpression(String expression) {
         Scanner str = new Scanner(expression);
         Stack<String> strings = new Stack<>();
-        while(str.hasNext("[0-9a-zA-Z+-/*()]|sqrt")){
+        while (str.hasNext("[0-9a-zA-Z+-/*()]|sqrt")) {
             strings.push(str.next("[0-9a-zA-Z+-/*()]|sqrt"));
         }
         String[] res = new String[strings.size()];
@@ -33,15 +28,15 @@ public class Client {
         return res;
     }
 
-    public void evaluateExpression(String expression, Map<String,Double> params) throws NoSuchMethodException, InvocationTargetException,
-            InstantiationException, IllegalAccessException, ArithmeticException{
+    public void evaluateExpression(String expression, Map<String, Double> params) throws NoSuchMethodException, InvocationTargetException,
+            InstantiationException, IllegalAccessException, ArithmeticException {
         RPNParser parser = new RPNParser();
         String[] denotedExpression = denoteExpression(expression);
         ArrayList<String> tokens = parser.convertToRPN(denotedExpression);
         tokens.add("PRINT");
         StringBuilder line = new StringBuilder();
-        for ( var entry : params.entrySet()) {
-            line.append("DEFINE "+entry.getKey() + " " + entry.getValue() + "\n");
+        for (var entry : params.entrySet()) {
+            line.append("DEFINE ").append(entry.getKey()).append(" ").append(entry.getValue()).append("\n");
         }
         for (String token : tokens) {
             line.append(token).append("\n");
@@ -52,7 +47,7 @@ public class Client {
     }
 
     public void evaluateExpression(Scanner source) throws NoSuchMethodException, InvocationTargetException,
-                     InstantiationException, IllegalAccessException, ArithmeticException{
+            InstantiationException, IllegalAccessException, ArithmeticException {
         Parser parser = new Parser(source);
         while (parser.hasNextLine()) {
             String[] params = parser.parse();
@@ -65,11 +60,12 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        Calculator calculator = new Calculator();
+        IDataManager dataManager = new ConsoleManager();
+        Calculator calculator = new Calculator(dataManager);
         CommandInvoker inv = new CommandInvoker();
         CommandFactory factory = new CommandFactory(calculator);
         Scanner data;
-        Client client = new Client(calculator, inv, factory);
+        Client client = new Client(inv, factory);
         if (args.length == 0) {
             data = new Scanner(System.in);
         } else {
@@ -83,11 +79,9 @@ public class Client {
         }
         try {
             client.evaluateExpression(data);
-        } catch (NoSuchMethodException | InvocationTargetException|
-                InstantiationException | IllegalAccessException|  ArithmeticException e){
+        } catch (NoSuchMethodException | InvocationTargetException |
+                InstantiationException | IllegalAccessException | ArithmeticException e) {
             System.out.println(e.getMessage());
         }
-
-        UnitTest.runTest();
     }
 }

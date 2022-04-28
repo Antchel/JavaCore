@@ -41,7 +41,8 @@ public class CommandFactory {
     /* For new calculator commands */
     @SuppressWarnings("unchecked")
     public void register(String commandName, String clazz) throws NoSuchMethodException, ClassNotFoundException {
-        commandMap.put(commandName, (Constructor<? extends Command>) Class.forName(clazz).getConstructor(ICalculator.class, String[].class));
+        commandMap.put(commandName, (Constructor<? extends Command>) Class.forName(clazz).
+                getConstructor(ICalculator.class, String[].class));
     }
 
 }

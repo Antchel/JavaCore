@@ -1,10 +1,17 @@
 package com.jcourse.agolovenko.lesson2;
 
+import com.jcourse.agolovenko.lesson2.datamanagers.IDataManager;
+
 import java.util.*;
 
 public class Calculator implements ICalculator {
     private final Stack<Double> stack = new Stack<>();
     private final HashMap<String, Double> definedVariables = new HashMap<>();
+    private final IDataManager dataManager;
+
+    public Calculator(IDataManager dataManager) {
+        this.dataManager = dataManager;
+    }
 
     public void pop() {
         try {
@@ -16,7 +23,7 @@ public class Calculator implements ICalculator {
     }
 
     public void push(String value) {
-        if (!isNumeric(value)) {
+        if (Character.isAlphabetic(value.charAt(0))) {
             if (definedVariables.containsKey(value)) {
                 stack.push(definedVariables.get(value));
             } else {
@@ -29,17 +36,21 @@ public class Calculator implements ICalculator {
 
     public void print() {
         try {
-            System.out.println(stack.peek());
+            dataManager.processData(stack.peek());
         } catch (EmptyStackException e) {
             e.printStackTrace();
         }
     }
 
     public void define(String variable, String value) {
-        if (isNumeric(value) && !isNumeric(variable)) {
-            definedVariables.put(variable, Double.parseDouble(value));
-        } else {
-            System.out.println("Value for the defined variable must be a number and variable shouldn't be a numeric!");
+        try {
+            if (Character.isAlphabetic(variable.charAt(0))) {
+                definedVariables.put(variable, getNumber(value));
+            } else {
+                System.out.println("Variable shouldn't be a numeric!");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + " Value for the defined variable must be a number.");
         }
     }
 
@@ -60,7 +71,7 @@ public class Calculator implements ICalculator {
             if (divisor == 0) {
                 throw new ArithmeticException("Zero division error");
             }
-            stack.push(divident/divisor);
+            stack.push(divident / divisor);
         }
 
     }
@@ -91,12 +102,11 @@ public class Calculator implements ICalculator {
         }
     }
 
-    private boolean isNumeric(String value) {
+    private Double getNumber(String value) {
         try {
-            Double.parseDouble(value);
-            return true;
+            return Double.parseDouble(value);
         } catch (NumberFormatException e) {
-            return false;
+            throw new IllegalArgumentException("String " + value + " can not be parsed to Double.");
         }
     }
 }

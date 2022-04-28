@@ -1,6 +1,5 @@
 package com.jcourse.agolovenko.lesson2.commands;
 
-import com.jcourse.agolovenko.lesson2.Calculator;
 import com.jcourse.agolovenko.lesson2.ICalculator;
 
 public class AddCommand implements Command {
