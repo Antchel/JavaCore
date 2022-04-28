@@ -1,8 +1,8 @@
 package com.jcourse.agolovenko.lesson2.commands;
 
-import com.jcourse.agolovenko.lesson2.ALU;
+import com.jcourse.agolovenko.lesson2.ICalculator;
 
-public record PushCommand(ALU calculator, String[] params) implements Command {
+public record PushCommand(ICalculator calculator, String[] params) implements Command {
 
     @Override
     public void execute() {

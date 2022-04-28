@@ -1,11 +1,11 @@
 package com.jcourse.agolovenko.lesson2.commands;
 
-import com.jcourse.agolovenko.lesson2.ALU;
+import com.jcourse.agolovenko.lesson2.ICalculator;
 
 public class MultCommand implements Command {
-    private final ALU calculator;
+    private final ICalculator calculator;
 
-    public MultCommand(ALU calculator, String[] params) {
+    public MultCommand(ICalculator calculator, String[] params) {
         this.calculator = calculator;
     }
 

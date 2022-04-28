@@ -1,29 +1,9 @@
 package com.jcourse.agolovenko.lesson2.parser;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.Stack;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public record Parser(Scanner source) {
-
-    public String[] parse() {
-        int paramCnt = 0;
-        Pattern p = Pattern.compile("[a-zA-Z0-9+-/*]+");
-        String[] params = new String[3];
-        Matcher m1 = p.matcher(source.nextLine());
-        while (m1.find() && paramCnt < 3) {
-            params[paramCnt] = m1.group();
-            paramCnt++;
-        }
-        return params;
-    }
-
-    public boolean hasNextLine() {
-        return source.hasNextLine();
-    }
-
+public class RPNParser {
     public ArrayList<String> convertToRPN(String[] expression) {
         ArrayList<String> result = new ArrayList<>();
         if (expression == null || expression.length == 0) {
@@ -32,8 +12,10 @@ public record Parser(Scanner source) {
         Stack<String> opStack = new Stack<>();
         for (String token : expression) {
             if (isNumber(token)) {
-                result.add(token);
-            } else if (token.equals("(")) {
+                result.add("PUSH "+token);
+            } else if (token.equals("sqrt")) {
+                opStack.push(token);}
+            else if (token.equals("(")) {
                 opStack.push(token);
             } else if (token.equals(")")) {
                 while (!opStack.peek().equals("(")) {
@@ -54,16 +36,18 @@ public record Parser(Scanner source) {
     }
 
     private boolean isNumber(String token) {
-        return Character.isDigit(token.charAt(0));
+        return ((Character.isDigit(token.charAt(0)) || Character.isAlphabetic(token.charAt(0))) && !token.equals("sqrt"));
     }
 
     private int getPriority(String op) {
         if (op.equals("(")) {
             return 0;
-        } else if (op.equals("+") || op.equals("-")) {
+        } else if (op.equals("sqrt") || op.equals("SQRT")) {
             return 1;
-        } else {
+        }else if (op.equals("+") || op.equals("-")) {
             return 2;
+        } else {
+            return 3;
         }
     }
 }

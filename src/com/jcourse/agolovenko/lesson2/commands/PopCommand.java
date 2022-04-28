@@ -1,11 +1,11 @@
 package com.jcourse.agolovenko.lesson2.commands;
 
-import com.jcourse.agolovenko.lesson2.ALU;
+import com.jcourse.agolovenko.lesson2.ICalculator;
 
 public class PopCommand implements Command {
-    private final ALU calculator;
+    private final ICalculator calculator;
 
-    public PopCommand(ALU calculator, String[] params) {
+    public PopCommand(ICalculator calculator, String[] params) {
         this.calculator = calculator;
     }
 

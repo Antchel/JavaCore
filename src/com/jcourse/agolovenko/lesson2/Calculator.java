@@ -1,44 +1,102 @@
 package com.jcourse.agolovenko.lesson2;
 
-import com.jcourse.agolovenko.lesson2.parser.Parser;
-import com.jcourse.agolovenko.lesson2.test.UnitTest;
+import java.util.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Scanner;
+public class Calculator implements ICalculator {
+    private final Stack<Double> stack = new Stack<>();
+    private final HashMap<String, Double> definedVariables = new HashMap<>();
 
-public class Calculator {
+    public void pop() {
+        try {
+            stack.pop();
+        } catch (EmptyStackException e) {
+            System.out.println("Cannot pop element from stack. It is empty!");
+            e.printStackTrace();
+        }
+    }
 
-    public static void main(String[] args) {
-        ALU calculator = new ALU();
-        Invoker inv = new Invoker();
-        Scanner data;
-        if (args.length == 0) {
-            data = new Scanner(System.in);
+    public void push(String value) {
+        if (!isNumeric(value)) {
+            if (definedVariables.containsKey(value)) {
+                stack.push(definedVariables.get(value));
+            } else {
+                System.out.println("Variable " + value + " is not defined");
+            }
         } else {
-            File file = new File(args[0]);
-            try {
-                data = new Scanner(file);
-            } catch (FileNotFoundException e) {
-                System.out.println(e.getMessage());
-                e.printStackTrace();
-                return;
-            }
+            stack.push(Double.parseDouble(value));
         }
-        Parser parser = new Parser(data);
-        while (parser.hasNextLine()) {
-            String[] params = parser.parse();
-            try {
-                inv.invoke(calculator, params);
-            } catch (NoSuchMethodException | InvocationTargetException
-                    | InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
+    }
+
+    public void print() {
+        try {
+            System.out.println(stack.peek());
+        } catch (EmptyStackException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void define(String variable, String value) {
+        if (isNumeric(value) && !isNumeric(variable)) {
+            definedVariables.put(variable, Double.parseDouble(value));
+        } else {
+            System.out.println("Value for the defined variable must be a number and variable shouldn't be a numeric!");
+        }
+    }
+
+    public void add() {
+        if (stack.size() == 0) {
+            System.out.println("Nothing to add. Stack is empty.");
+        } else if (stack.size() > 1) {
+            stack.push(stack.pop() + stack.pop());
+        }
+    }
+
+    public void div() {
+        if (stack.size() < 2) {
+            System.out.println("Don't enough variables for division. Stack consist of" + stack.size() + "variables");
+        } else {
+            Double divisor = stack.pop();
+            Double divident = stack.pop();
+            if (divisor == 0) {
+                throw new ArithmeticException("Zero division error");
             }
+            stack.push(divident/divisor);
         }
 
-        ALU calc = new ALU();
-        UnitTest.runTest(calc);
+    }
 
+    public void sqrt() {
+        if (stack.size() == 0) {
+            System.out.println("Nothing to add. Stack is empty.");
+        } else {
+            stack.push(Math.sqrt(stack.pop()));
+        }
+    }
+
+    public void sub() {
+        if (stack.size() == 0) {
+            System.out.println("Nothing to sub. Stack is empty.");
+        } else if (stack.size() == 1) {
+            stack.push(-stack.pop());
+        } else {
+            stack.push(-stack.pop() + stack.pop());
+        }
+    }
+
+    public void mult() {
+        if (stack.size() < 2) {
+            System.out.println("Don't enough variables for multiplication. Stack consist of " + stack.size() + " variables");
+        } else {
+            stack.push(stack.pop() * stack.pop());
+        }
+    }
+
+    private boolean isNumeric(String value) {
+        try {
+            Double.parseDouble(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }
