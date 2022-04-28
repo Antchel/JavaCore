@@ -3,10 +3,16 @@ package com.jcourse.agolovenko.lesson2;
 import com.jcourse.agolovenko.lesson2.commands.*;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
-public class Factory {
+public class CommandFactory {
     static final HashMap<String, Constructor<? extends Command>> commandMap = new HashMap<>();
+    private final ICalculator calculator;
+
+    public CommandFactory(ICalculator calculator) {
+        this.calculator = calculator;
+    }
 
     static {
         try {
@@ -24,17 +30,18 @@ public class Factory {
         }
     }
 
-    public Constructor<? extends Command> getCommandByName(String name) throws NoSuchMethodException{
+    public Command getCommandByName(String name, String[] params) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         if (commandMap.containsKey(name.toLowerCase()))
-            return commandMap.get(name.toLowerCase());
+            return commandMap.get(name.toLowerCase()).newInstance(calculator, params);
         else {
             throw new NoSuchMethodException("Couldn't find such command in command pool.");
         }
     }
 
     /* For new calculator commands */
-    public void register(String commandName, Class<? extends Command> clazz) throws NoSuchMethodException {
-        commandMap.put(commandName, clazz.getConstructor(ICalculator.class, String[].class));
+    @SuppressWarnings("unchecked")
+    public void register(String commandName, String clazz) throws NoSuchMethodException, ClassNotFoundException {
+        commandMap.put(commandName, (Constructor<? extends Command>) Class.forName(clazz).getConstructor(ICalculator.class, String[].class));
     }
 
 }

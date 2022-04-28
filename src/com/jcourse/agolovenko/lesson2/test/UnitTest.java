@@ -2,15 +2,16 @@ package com.jcourse.agolovenko.lesson2.test;
 
 import com.jcourse.agolovenko.lesson2.Calculator;
 import com.jcourse.agolovenko.lesson2.Client;
-import com.jcourse.agolovenko.lesson2.Factory;
-import com.jcourse.agolovenko.lesson2.Invoker;
+import com.jcourse.agolovenko.lesson2.CommandFactory;
+import com.jcourse.agolovenko.lesson2.CommandInvoker;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class UnitTest {
     public static void runTest() {
-        Client client = new Client(new Calculator(), new Invoker(), new Factory());
+        Calculator calculator = new Calculator();
+        Client client = new Client(calculator, new CommandInvoker(), new CommandFactory(calculator));
         try {
             String x1 = " ( - b + sqrt ( b * b - 4 * a * c ) ) / ( 2 * a ) ";
             String x2 = " ( - b - sqrt ( b * b - 4 * a * c ) ) / ( 2 * a ) ";

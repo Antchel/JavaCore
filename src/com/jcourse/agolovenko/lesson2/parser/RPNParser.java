@@ -12,10 +12,10 @@ public class RPNParser {
         Stack<String> opStack = new Stack<>();
         for (String token : expression) {
             if (isNumber(token)) {
-                result.add("PUSH "+token);
+                result.add("PUSH " + token);
             } else if (token.equals("sqrt")) {
-                opStack.push(token);}
-            else if (token.equals("(")) {
+                opStack.push(token);
+            } else if (token.equals("(")) {
                 opStack.push(token);
             } else if (token.equals(")")) {
                 while (!opStack.peek().equals("(")) {
@@ -44,7 +44,7 @@ public class RPNParser {
             return 0;
         } else if (op.equals("sqrt") || op.equals("SQRT")) {
             return 1;
-        }else if (op.equals("+") || op.equals("-")) {
+        } else if (op.equals("+") || op.equals("-")) {
             return 2;
         } else {
             return 3;

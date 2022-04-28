@@ -11,12 +11,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class Client {
-    private final ICalculator calculator;
-    private final Invoker invoker;
-    public final Factory factory;
+    private final CommandInvoker invoker;
+    public final CommandFactory factory;
 
-    public Client(ICalculator calc, Invoker invoker, Factory factory) {
-        this.calculator = calc;
+    public Client(ICalculator calc, CommandInvoker invoker, CommandFactory factory) {
         this.invoker = invoker;
         this.factory = factory;
     }
@@ -59,7 +57,7 @@ public class Client {
         while (parser.hasNextLine()) {
             String[] params = parser.parse();
             String[] tail = Arrays.copyOfRange(params, 1, params.length);
-            Command command = factory.getCommandByName(params[0]).newInstance(calculator, tail);
+            Command command = factory.getCommandByName(params[0], tail);
 
             invoker.invoke(command);
 
@@ -68,8 +66,8 @@ public class Client {
 
     public static void main(String[] args) {
         Calculator calculator = new Calculator();
-        Invoker inv = new Invoker();
-        Factory factory = new Factory();
+        CommandInvoker inv = new CommandInvoker();
+        CommandFactory factory = new CommandFactory(calculator);
         Scanner data;
         Client client = new Client(calculator, inv, factory);
         if (args.length == 0) {
