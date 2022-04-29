@@ -1,8 +1,6 @@
 package com.jcourse.agolovenko.lesson2.datamanagers;
 
-import com.jcourse.agolovenko.lesson2.datamanagers.IDataManager;
-
-public class StorageManager implements IDataManager {
+public class TestPrintDevice implements IPrintDevice {
     private Double result;
 
     public Double getResult() {
@@ -10,7 +8,7 @@ public class StorageManager implements IDataManager {
     }
 
     @Override
-    public void processData(Double number) {
+    public void accept(Double number) {
         result = number;
     }
 }

@@ -1,15 +1,15 @@
 package com.jcourse.agolovenko.lesson2;
 
-import com.jcourse.agolovenko.lesson2.datamanagers.IDataManager;
+import com.jcourse.agolovenko.lesson2.datamanagers.IPrintDevice;
 
 import java.util.*;
 
 public class Calculator implements ICalculator {
     private final Stack<Double> stack = new Stack<>();
     private final HashMap<String, Double> definedVariables = new HashMap<>();
-    private final IDataManager dataManager;
+    private final IPrintDevice dataManager;
 
-    public Calculator(IDataManager dataManager) {
+    public Calculator(IPrintDevice dataManager) {
         this.dataManager = dataManager;
     }
 
@@ -36,7 +36,7 @@ public class Calculator implements ICalculator {
 
     public void print() {
         try {
-            dataManager.processData(stack.peek());
+            dataManager.accept(stack.peek());
         } catch (EmptyStackException e) {
             e.printStackTrace();
         }

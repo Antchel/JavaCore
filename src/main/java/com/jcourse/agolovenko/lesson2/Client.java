@@ -1,8 +1,8 @@
 package com.jcourse.agolovenko.lesson2;
 
 import com.jcourse.agolovenko.lesson2.commands.Command;
-import com.jcourse.agolovenko.lesson2.datamanagers.ConsoleManager;
-import com.jcourse.agolovenko.lesson2.datamanagers.IDataManager;
+import com.jcourse.agolovenko.lesson2.datamanagers.ConsolePrintDevice;
+import com.jcourse.agolovenko.lesson2.datamanagers.IPrintDevice;
 import com.jcourse.agolovenko.lesson2.parser.Parser;
 import com.jcourse.agolovenko.lesson2.parser.RPNParser;
 
@@ -60,7 +60,7 @@ public record Client(CommandInvoker invoker,
     }
 
     public static void main(String[] args) {
-        IDataManager dataManager = new ConsoleManager();
+        IPrintDevice dataManager = new ConsolePrintDevice();
         Calculator calculator = new Calculator(dataManager);
         CommandInvoker inv = new CommandInvoker();
         CommandFactory factory = new CommandFactory(calculator);
