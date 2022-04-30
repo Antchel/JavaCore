@@ -21,6 +21,7 @@ public class CalculatorTest {
         CommandFactory factory = new CommandFactory(calculator);
         CommandInvoker invoker = new CommandInvoker();
         Client client = new Client(invoker,factory);
+
         String x1 = " ( - b + sqrt ( b * b - 4 * a * c ) ) / ( 2 * a ) ";
         String x2 = " ( - b - sqrt ( b * b - 4 * a * c ) ) / ( 2 * a ) ";
         Map<String, Double> params = Map.of("a", 1., "b", 0., "c", -16.);
