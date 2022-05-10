@@ -1,24 +1,25 @@
 package com.jcourse.agolovenko.lesson2;
 
 import com.jcourse.agolovenko.lesson2.datamanagers.TestPrintDevice;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+import com.jcourse.agolovenko.lesson3.ExecuteMode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class CalculatorTest {
 
-    static Logger log = Logger.getLogger(CalculatorTest.class.getName());
-
+    static Logger log = LoggerFactory.getLogger("TEST");
     @Test
     public void evaluateSQRT() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        BasicConfigurator.configure();
         TestPrintDevice dataManager = new TestPrintDevice();
         Calculator calculator = new Calculator(dataManager);
-        CommandFactory factory = new CommandFactory(calculator);
+        ExecuteMode mode = ExecuteMode.DEBUG;
+        CommandFactory factory = new CommandFactory(calculator, mode);
         CommandInvoker invoker = new CommandInvoker();
         Client client = new Client(invoker,factory);
 

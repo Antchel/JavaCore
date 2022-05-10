@@ -1,13 +1,14 @@
 package com.jcourse.agolovenko.lesson2.commands;
 
 import com.jcourse.agolovenko.lesson2.ICalculator;
+import com.jcourse.agolovenko.lesson3.In;
+import com.jcourse.agolovenko.lesson3.InjectionType;
 
 public class SubCommand implements Command {
-    private final ICalculator calculator;
-
-    public SubCommand(ICalculator calculator, String[] params) {
-        this.calculator = calculator;
-    }
+    @In(InjectionType.STACK)
+    private ICalculator calculator;
+    @In(InjectionType.CONTEXT)
+    private String[] params;
 
     @Override
     public void execute() {

@@ -36,13 +36,13 @@ public class RPNParser {
     }
 
     private boolean isNumber(String token) {
-        return ((Character.isDigit(token.charAt(0)) || Character.isAlphabetic(token.charAt(0))) && !token.equals("sqrt"));
+        return ((Character.isDigit(token.charAt(0)) || Character.isAlphabetic(token.charAt(0))) && !token.equalsIgnoreCase("sqrt"));
     }
 
     private int getPriority(String op) {
         if (op.equals("(")) {
             return 0;
-        } else if (op.equals("sqrt") || op.equals("SQRT")) {
+        } else if (op.equalsIgnoreCase("sqrt")) {
             return 1;
         } else if (op.equals("+") || op.equals("-")) {
             return 2;
