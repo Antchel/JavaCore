@@ -18,9 +18,9 @@ import java.util.concurrent.Callable;
 public record Client(CommandInvoker invoker,
                      CommandFactory factory) {
 
-    @Option(names = "-P", description = "The filePath option")
+    @Option(names = {"-P", "--path"}, description = "The filePath option")
     private static String filePath = null;
-    @Option(names = "-M", description = "The execute mode option")
+    @Option(names = {"-M", "--mode"}, description = "The execute mode option")
     private static String executionMode = "RELEASE";
 
     private String[] denoteExpression(String expression) {
