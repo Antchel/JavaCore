@@ -16,17 +16,12 @@ import java.util.*;
 import java.util.concurrent.Callable;
 
 public record Client(CommandInvoker invoker,
-                     CommandFactory factory) implements Callable<Integer> {
+                     CommandFactory factory) {
 
     @Option(names = "-P", description = "The filePath option")
     private static String filePath = null;
     @Option(names = "-M", description = "The execute mode option")
     private static String executionMode = "RELEASE";
-
-    @Override
-    public Integer call() {
-        return 0;
-    }
 
     private String[] denoteExpression(String expression) {
         Scanner str = new Scanner(expression);
@@ -89,7 +84,7 @@ public record Client(CommandInvoker invoker,
         IPrintDevice dataManager = new ConsolePrintDevice();
         Calculator calculator = new Calculator(dataManager);
         CommandInvoker inv = new CommandInvoker();
-        new CommandLine(new Client(null, null)).execute(args);
+        new CommandLine(new Client(null, null)).parseArgs(args);
         ExecuteMode mode = executionMode.compareToIgnoreCase("debug") == 0 ? ExecuteMode.DEBUG : ExecuteMode.RELEASE;
         CommandFactory factory = new CommandFactory(calculator, mode);
         Client client = new Client(inv, factory);
