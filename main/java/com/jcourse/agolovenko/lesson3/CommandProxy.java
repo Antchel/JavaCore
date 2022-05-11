@@ -28,6 +28,7 @@ public class CommandProxy implements InvocationHandler {
         this.calculator = calculator;
     }
 
+
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         LOGGER.info(String.format("%0" + 50 + "d", 0).replace('0', '-'));

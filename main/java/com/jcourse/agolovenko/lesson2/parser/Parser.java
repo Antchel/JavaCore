@@ -24,17 +24,4 @@ public record Parser(Scanner source) {
         return source.hasNextLine();
     }
 
-    private boolean isNumber(String token) {
-        return Character.isDigit(token.charAt(0));
-    }
-
-    private int getPriority(String op) {
-        if (op.equals("(")) {
-            return 0;
-        } else if (op.equals("+") || op.equals("-")) {
-            return 1;
-        } else {
-            return 2;
-        }
-    }
 }
