@@ -31,7 +31,7 @@ public class Calculator implements ICalculator {
 
     @Override
     public void push(String value) {
-        if (Character.isAlphabetic(value.charAt(0))) {
+        if (isVariable(value)) {
             if (definedVariables.containsKey(value)) {
                 stack.push(definedVariables.get(value));
             } else {
@@ -144,6 +144,10 @@ public class Calculator implements ICalculator {
             stack.push(Math.log(Double.parseDouble(params[0])));
         }
 
+    }
+
+    private boolean isVariable(String argument) {
+        return Character.isAlphabetic(argument.charAt(0));
     }
 
     private Double getNumber(String value) {
