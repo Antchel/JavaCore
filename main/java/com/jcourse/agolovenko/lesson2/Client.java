@@ -9,11 +9,9 @@ import com.jcourse.agolovenko.lesson3.ExecuteMode;
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.concurrent.Callable;
 
 public record Client(CommandInvoker invoker,
                      CommandFactory factory) {
@@ -56,19 +54,24 @@ public record Client(CommandInvoker invoker,
             line.append(token).append("\n");
         }
         line.append("POP\n");
-        Scanner data = new Scanner(line.toString());
-        evaluateExpression(data);
+        BufferedReader data = new BufferedReader(new StringReader(line.toString()));
+        try {
+            evaluateExpression(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      *
      * @param source Input source for RPN commands for calculator
      */
-    public void evaluateExpression(Scanner source) throws NoSuchMethodException, InvocationTargetException,
-            InstantiationException, IllegalAccessException, ArithmeticException {
-        Parser parser = new Parser(source);
-        while (parser.hasNextLine()) {
-            String[] params = parser.parse();
+    public void evaluateExpression(BufferedReader source) throws NoSuchMethodException, InvocationTargetException,
+            InstantiationException, IllegalAccessException, ArithmeticException, IOException {
+        Parser parser = new Parser();
+        String line;
+        while ((line = source.readLine()) != null) {
+            String[] params = parser.parse(line);
             String[] tail = Arrays.copyOfRange(params, 1, params.length);
             try {
                 Command command = factory.getCommandByName(params[0], tail);
@@ -88,15 +91,14 @@ public record Client(CommandInvoker invoker,
         ExecuteMode mode = executionMode.compareToIgnoreCase("debug") == 0 ? ExecuteMode.DEBUG : ExecuteMode.RELEASE;
         CommandFactory factory = new CommandFactory(calculator, mode);
         Client client = new Client(inv, factory);
-        Scanner data;
+        BufferedReader data;
 
         if (filePath == null) {
-            data = new Scanner(System.in);
+            data = new BufferedReader(new InputStreamReader(System.in));
         } else {
-            File file = new File(filePath);
             try {
-                data = new Scanner(file);
-            } catch (FileNotFoundException e) {
+                data = new BufferedReader(new FileReader(filePath));
+            } catch (IOException e) {
                 System.out.println(e.getMessage());
                 return;
             }
@@ -104,7 +106,7 @@ public record Client(CommandInvoker invoker,
         try {
             client.evaluateExpression(data);
         } catch (NoSuchMethodException | InvocationTargetException |
-                InstantiationException | IllegalAccessException | ArithmeticException e) {
+                InstantiationException | IllegalAccessException | ArithmeticException | IOException e) {
             System.out.println(e.getMessage());
         }
     }
