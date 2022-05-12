@@ -1,10 +1,16 @@
 package com.jcourse.agolovenko.lesson2;
 
 import com.jcourse.agolovenko.lesson2.datamanagers.IPrintDevice;
+import com.jcourse.agolovenko.lesson3.In;
+import com.jcourse.agolovenko.lesson3.InjectionType;
 
 import java.util.*;
 
+/**
+ * Receiver in command pattern concept
+ */
 public class Calculator implements ICalculator {
+    @In(InjectionType.STACK)
     private final Stack<Double> stack = new Stack<>();
     private final HashMap<String, Double> definedVariables = new HashMap<>();
     private final IPrintDevice dataManager;
@@ -13,6 +19,7 @@ public class Calculator implements ICalculator {
         this.dataManager = dataManager;
     }
 
+    @Override
     public void pop() {
         try {
             stack.pop();
@@ -22,8 +29,9 @@ public class Calculator implements ICalculator {
         }
     }
 
+    @Override
     public void push(String value) {
-        if (Character.isAlphabetic(value.charAt(0))) {
+        if (isVariable(value)) {
             if (definedVariables.containsKey(value)) {
                 stack.push(definedVariables.get(value));
             } else {
@@ -34,6 +42,7 @@ public class Calculator implements ICalculator {
         }
     }
 
+    @Override
     public void print() {
         try {
             dataManager.accept(stack.peek());
@@ -42,6 +51,7 @@ public class Calculator implements ICalculator {
         }
     }
 
+    @Override
     public void define(String variable, String value) {
         try {
             if (Character.isAlphabetic(variable.charAt(0))) {
@@ -54,6 +64,7 @@ public class Calculator implements ICalculator {
         }
     }
 
+    @Override
     public void add() {
         if (stack.size() == 0) {
             System.out.println("Nothing to add. Stack is empty.");
@@ -62,6 +73,7 @@ public class Calculator implements ICalculator {
         }
     }
 
+    @Override
     public void div() {
         if (stack.size() < 2) {
             System.out.println("Don't enough variables for division. Stack consist of" + stack.size() + "variables");
@@ -76,6 +88,7 @@ public class Calculator implements ICalculator {
 
     }
 
+    @Override
     public void sqrt() {
         if (stack.size() == 0) {
             System.out.println("Nothing to add. Stack is empty.");
@@ -84,6 +97,7 @@ public class Calculator implements ICalculator {
         }
     }
 
+    @Override
     public void sub() {
         if (stack.size() == 0) {
             System.out.println("Nothing to sub. Stack is empty.");
@@ -94,12 +108,46 @@ public class Calculator implements ICalculator {
         }
     }
 
+    @Override
     public void mult() {
         if (stack.size() < 2) {
             System.out.println("Don't enough variables for multiplication. Stack consist of " + stack.size() + " variables");
         } else {
             stack.push(stack.pop() * stack.pop());
         }
+    }
+
+    @Override
+    public void exp(String[] params) {
+        int argc = (int) Arrays.stream(params).filter(Objects::nonNull).count();
+        if (argc == 0) {
+            if (stack.size() == 0)
+                throw new IllegalArgumentException("Stack is empty. Too few arguments for \"exp\"");
+            else{
+                stack.push(Math.exp(stack.pop()));
+            }
+        } else {
+            stack.push(Math.exp(Double.parseDouble(params[0])));
+        }
+    }
+
+    @Override
+    public void log(String[] params) {
+        int argc = (int) Arrays.stream(params).filter(Objects::nonNull).count();
+        if (argc == 0) {
+            if (stack.size() == 0)
+                throw new IllegalArgumentException("Stack is empty. Too few arguments for \"exp\"");
+            else{
+                stack.push(Math.log(stack.pop()));
+            }
+        } else {
+            stack.push(Math.log(Double.parseDouble(params[0])));
+        }
+
+    }
+
+    private boolean isVariable(String argument) {
+        return Character.isAlphabetic(argument.charAt(0));
     }
 
     private Double getNumber(String value) {

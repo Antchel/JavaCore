@@ -1,5 +1,8 @@
 package com.jcourse.agolovenko.lesson2;
 
+/**
+ * The receiver interface
+ */
 public interface ICalculator {
     void pop();
 
@@ -18,4 +21,9 @@ public interface ICalculator {
     void sub();
 
     void mult();
+
+    void exp(String[] params);
+
+    void log(String[] params);
+
 }
