@@ -11,6 +11,7 @@ import picocli.CommandLine.Option;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public record Client(CommandInvoker invoker,
@@ -54,7 +55,7 @@ public record Client(CommandInvoker invoker,
             line.append(token).append("\n");
         }
         line.append("POP\n");
-        BufferedReader data = new BufferedReader(new StringReader(line.toString()));
+        InputStream data = new ByteArrayInputStream(line.toString().getBytes());
         try {
             evaluateExpression(data);
         } catch (IOException e) {
@@ -66,12 +67,12 @@ public record Client(CommandInvoker invoker,
      *
      * @param source Input source for RPN commands for calculator
      */
-    public void evaluateExpression(BufferedReader source) throws NoSuchMethodException, InvocationTargetException,
+    public void evaluateExpression(InputStream source) throws NoSuchMethodException, InvocationTargetException,
             InstantiationException, IllegalAccessException, ArithmeticException, IOException {
         Parser parser = new Parser();
-        String line;
-        while ((line = source.readLine()) != null) {
-            String[] params = parser.parse(line);
+        Scanner scanner = new Scanner(source);
+        while (scanner.hasNextLine()) {
+            String[] params = parser.parse(scanner.nextLine());
             String[] tail = Arrays.copyOfRange(params, 1, params.length);
             try {
                 Command command = factory.getCommandByName(params[0], tail);
@@ -91,13 +92,13 @@ public record Client(CommandInvoker invoker,
         ExecuteMode mode = executionMode.compareToIgnoreCase("debug") == 0 ? ExecuteMode.DEBUG : ExecuteMode.RELEASE;
         CommandFactory factory = new CommandFactory(calculator, mode);
         Client client = new Client(inv, factory);
-        BufferedReader data;
+        InputStream data;
 
         if (filePath == null) {
-            data = new BufferedReader(new InputStreamReader(System.in));
+            data = System.in;
         } else {
             try {
-                data = new BufferedReader(new FileReader(filePath));
+                data = new FileInputStream(filePath);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
                 return;
