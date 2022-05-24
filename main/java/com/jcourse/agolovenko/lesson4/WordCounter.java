@@ -2,7 +2,7 @@ package com.jcourse.agolovenko.lesson4;
 
 public class WordCounter implements Comparable<WordCounter>{
     private final String word;
-    private int counter = 1;
+    private int counter = 0;
 
     public WordCounter(String word) {
         this.word = word;
@@ -22,6 +22,10 @@ public class WordCounter implements Comparable<WordCounter>{
 
     @Override
     public int compareTo(WordCounter o) {
-        return Integer.compare(o.counter, this.counter);
+        int res = Integer.compare(o.counter, this.counter);
+        if (res == 0) {
+            return o.getWord().compareToIgnoreCase(this.getWord());
+        }
+        return res;
     }
 }

@@ -17,7 +17,7 @@ public class CSVWriter {
         makeTitleInWordFreqFormat(sb);
         makeRowsInWordFreqFormat(sb, listOfWords, totalWordsCounter);
         try (FileOutputStream writer = new FileOutputStream(filename)) {
-            writer.write(sb.toString().getBytes(System.getProperty("file.encoding")));
+            writer.write(sb.toString().getBytes("CP1251"));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }

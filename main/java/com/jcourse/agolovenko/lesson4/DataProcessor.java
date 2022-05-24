@@ -3,7 +3,8 @@ package com.jcourse.agolovenko.lesson4;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,11 +38,8 @@ public class DataProcessor {
             word.append(letter);
         } else if (word.length() > 0) {
             totalWordsCounter++;
-            if (wordsCollection.containsKey(word.toString().toLowerCase())) {
-                wordsCollection.get(word.toString().toLowerCase()).increment();
-            } else {
-                wordsCollection.put(word.toString().toLowerCase(), new WordCounter(word.toString().toLowerCase()));
-            }
+            String key = word.toString().toLowerCase();
+            wordsCollection.computeIfAbsent(key, k -> new WordCounter(key)).increment();
             word.setLength(0);
         }
     }
