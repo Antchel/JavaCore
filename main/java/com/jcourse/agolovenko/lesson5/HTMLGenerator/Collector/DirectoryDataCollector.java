@@ -1,4 +1,8 @@
-package com.jcourse.agolovenko.lesson5.HTMLGenerator;
+package com.jcourse.agolovenko.lesson5.HTMLGenerator.Collector;
+
+import com.jcourse.agolovenko.lesson5.HTMLGenerator.Collector.ICollector;
+import com.jcourse.agolovenko.lesson5.HTMLGenerator.DataModel.IDirectoryModel;
+import com.jcourse.agolovenko.lesson5.HTMLGenerator.DataModel.NodeInfo;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -9,15 +13,15 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class DirectoryDataCollector implements IParser {
-    private final DirectoryDataStorage storage;
+public class DirectoryDataCollector implements ICollector {
+    private final IDirectoryModel storage;
 
-    public DirectoryDataCollector(DirectoryDataStorage storage) {
+    public DirectoryDataCollector(IDirectoryModel storage) {
         this.storage = storage;
     }
 
     @Override
-    public void parse() {
+    public void collect() {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(Path.of(storage.getRoot()))) {
             for (Path path : stream) {
                 FileTime creationTime = (FileTime) Files.getAttribute(path, "creationTime");

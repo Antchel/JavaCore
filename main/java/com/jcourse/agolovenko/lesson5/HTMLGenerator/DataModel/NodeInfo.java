@@ -1,4 +1,4 @@
-package com.jcourse.agolovenko.lesson5.HTMLGenerator;
+package com.jcourse.agolovenko.lesson5.HTMLGenerator.DataModel;
 
 public class NodeInfo {
 
