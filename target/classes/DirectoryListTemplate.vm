@@ -60,9 +60,9 @@
 
         </style>
 
-<head><title> Directory info - $dir</title></head>
+<head><title> Directory info - $model.root</title></head>
 <body>
-         <h1 id="header"> $dir </h1>
+         <h1 id="header"> $model.root </h1>
 
          <table>
            <thead>
@@ -77,8 +77,7 @@
              </tr>
            </thead>
            <tbody id="tbody">
-
-            #foreach( $node in $nodeList )
+            #foreach( $node in $model.dirNodes )
              <tr>
                 #if( !$node.isFile )
                     <td data-value="$node.nodeName"><a class="icon dir" href="$node.nodePath" </a> $node.nodeName </td>

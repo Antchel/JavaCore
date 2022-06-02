@@ -9,4 +9,6 @@ public interface IDirectoryModel {
     String getRoot();
 
     List<NodeInfo> getDirNodes();
+
+    void clearNodes();
 }

@@ -1,6 +1,8 @@
 package com.jcourse.agolovenko.lesson5.HTMLGenerator.Collector;
 
-@FunctionalInterface
+
 public interface ICollector {
-    void collect();
+    ICollector collect();
+
+    void inDirFirstOrder();
 }

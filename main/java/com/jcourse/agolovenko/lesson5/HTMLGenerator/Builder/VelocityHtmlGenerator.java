@@ -18,38 +18,32 @@ import java.util.stream.Stream;
 
 public class VelocityHtmlGenerator implements IHTMLBuilder {
     private Template template;
+    private final String templateObjectName;
 
-    public VelocityHtmlGenerator(String pathToTemplate) {
+    public VelocityHtmlGenerator(String pathToTemplate, String templateObjectName) {
         this.template = new Template();
+        this.templateObjectName = templateObjectName;
         try {
             template = Velocity.getTemplate(pathToTemplate);
         } catch (Exception e) {
-            throw new RuntimeException("Couldn't get template from ["+pathToTemplate+"]");
+            throw new RuntimeException("Couldn't get template from [" + pathToTemplate + "]");
         }
     }
 
     public void generateHtmlByModel(IDirectoryModel model, Writer writer) {
-        new DirectoryDataCollector(model).collect();
-        List<NodeInfo> sortedList = Stream.concat(model.getDirNodes().stream()
-                                .filter(el -> !el.getIsFile())
-                                .sorted(Comparator.comparing(NodeInfo::getNodeNameInLowerCase)),
-                        model.getDirNodes().stream()
-                                .filter(NodeInfo::getIsFile)
-                                .sorted(Comparator.comparing(NodeInfo::getNodeNameInLowerCase)))
-                .collect(Collectors.toList());
 
         VelocityContext context = new VelocityContext();
 
-        context.put("nodeList", sortedList);
-        context.put("dir", model.getRoot());
+        context.put(templateObjectName, model);
+//        context.put("dir", model.getRoot());
         template.merge(context, writer);
     }
 
-    public void writeHTMLtoFile(Writer HTMLData, String HTMLFilePath){
+    public void writeHTMLtoFile(Writer HTMLData, String HTMLFilePath) {
         try (PrintWriter file = new PrintWriter(new FileOutputStream(HTMLFilePath))) {
             file.write(HTMLData.toString());
         } catch (FileNotFoundException e) {
-            throw new RuntimeException("Couldn't create file in ["+HTMLFilePath+"]");
+            throw new RuntimeException("Couldn't create file in [" + HTMLFilePath + "]");
         }
     }
 }
