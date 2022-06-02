@@ -24,7 +24,7 @@ public class VelocityHtmlGenerator implements IHTMLBuilder {
         try {
             template = Velocity.getTemplate(pathToTemplate);
         } catch (Exception e) {
-            System.err.println("Exception caught: " + e.getMessage());
+            throw new RuntimeException("Couldn't get template from ["+pathToTemplate+"]");
         }
     }
 
@@ -49,7 +49,7 @@ public class VelocityHtmlGenerator implements IHTMLBuilder {
         try (PrintWriter file = new PrintWriter(new FileOutputStream(HTMLFilePath))) {
             file.write(HTMLData.toString());
         } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException("Couldn't create file in ["+HTMLFilePath+"]");
         }
     }
 }

@@ -8,12 +8,13 @@ import java.util.List;
 
 public class DirectoryModel implements IDirectoryModel {
     private final List<NodeInfo> dirNodes = new ArrayList<>();
-    private String root;
+    private static String root;
 
-    public void fromFileSystemDirectory(String path) throws IllegalAccessException {
-         if (!Files.isDirectory(Path.of(path)))
-             throw new IllegalAccessException("String [" + path +"] is not a directory");
-        this.root = path;
+    public static IDirectoryModel fromFileSystemDirectory(String path) throws IllegalAccessException {
+        if (!Files.isDirectory(Path.of(path)))
+            throw new IllegalAccessException("String [" + path + "] is not a directory");
+        root = path;
+        return new DirectoryModel();
     }
 
     public void putData(NodeInfo data) {
