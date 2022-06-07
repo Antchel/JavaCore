@@ -8,17 +8,18 @@ import java.net.Socket;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Date;
 
 public class HTTPResponse {
     private final StringBuilder response = new StringBuilder();
-    private final HTTPRequest request;
+    private final FileHttpGetRequest request;
     private final Socket clientSocket;
     private final String rootDirectoryPath;
-    private HTMLPageBuilder builder;
+    private final StringWriter writer = new StringWriter();
 
-    public HTTPResponse(HTTPRequest request, Socket clientSocket, String rootDirectoryPath) {
+    public HTTPResponse(FileHttpGetRequest request, Socket clientSocket, String rootDirectoryPath) {
         this.request = request;
         this.rootDirectoryPath = rootDirectoryPath;
         this.clientSocket = clientSocket;
@@ -29,11 +30,19 @@ public class HTTPResponse {
     public void buildResponse() {
         String path = request.getTargetPath();
         String appType = "";
-        if (path == null || path.isEmpty() || !Files.isDirectory(Path.of(path)))
+
+
+        Path folder = Paths.get(path);
+        if (!Files.exists(folder)) {
+            response.append("HTTP/1.1 404 Not Found\r\n");
+            return;
+        }
+
+        if (path.isEmpty() || !Files.isDirectory(folder))
             path = rootDirectoryPath;
         if (Files.isDirectory(Path.of(request.getTargetPath()))) {
             try {
-                builder = new HTMLPageBuilder(path, "./anton-golovenko/main/resources/ServerTemplate.vm", "model");
+                HTMLPageBuilder.HTMLPageBuild(path, "./anton-golovenko/main/resources/ServerTemplate.vm", "model", writer);
             } catch (IllegalAccessException e) {
                 sendErrorNotify("Could not get access to template file");
             }
@@ -46,7 +55,7 @@ public class HTTPResponse {
                 response.append("HTTP/1.1 200 OK\r\n");
                 if (appType.isEmpty()) {
                     addResponseHeaders();
-                    response.append(builder.getWriter().toString());
+                    response.append(writer);
 
                 } else if (appType.equals("null")) {
                     response.append("Content-Type: application/octet-stream\r\n");
@@ -83,6 +92,9 @@ public class HTTPResponse {
 
     }
 
+    public final String getResponse() {
+        return response.toString();
+    }
     // TODO: 07.06.2022 Create additional class for headers generatind with methods : SetContentType, etc. 
     private void addResponseHeaders() {
         response.append("Content-Type: text/html; charset=utf-8\r\n");
@@ -101,17 +113,5 @@ public class HTTPResponse {
             throw new RuntimeException(e);
         }
 
-    }
-
-    public void send() {
-        try (
-                BufferedWriter outputData = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()))
-        ) {
-            outputData.write(response.toString());
-            outputData.flush();
-        } catch (
-                IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

@@ -3,7 +3,7 @@ package com.jcourse.agolovenko.lesson5.HTTPServer.HTTP;
 import java.io.*;
 import java.util.*;
 
-public class HTTPRequest {
+public class FileHttpGetRequest {
 
     private final InputStream request;
     private String HTTPMethod;
@@ -19,7 +19,7 @@ public class HTTPRequest {
     }
 
 
-    public HTTPRequest(InputStream request) throws IOException {
+    public FileHttpGetRequest(InputStream request) throws IOException {
         this.request = request;
         parse();
     }

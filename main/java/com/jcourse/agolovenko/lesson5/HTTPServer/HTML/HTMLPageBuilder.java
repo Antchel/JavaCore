@@ -7,17 +7,11 @@ import com.jcourse.agolovenko.lesson5.HTMLGenerator.DataModel.IDirectoryModel;
 
 import java.io.StringWriter;
 
-public class HTMLPageBuilder {
+public abstract class HTMLPageBuilder {
 
-    private final StringWriter writer = new StringWriter();
-
-    public HTMLPageBuilder(String dirPath, String templatePath, String templateObjectName) throws IllegalAccessException {
+    public static void HTMLPageBuild(String dirPath, String templatePath, String templateObjectName, StringWriter writer) throws IllegalAccessException {
         IDirectoryModel model = DirectoryModel.fromFileSystemDirectory(dirPath);
         IHTMLBuilder html = new VelocityHtmlGenerator(templatePath, templateObjectName);
         html.generateHtmlByModel(model, writer);
-    }
-
-    public StringWriter getWriter() {
-        return writer;
     }
 }
