@@ -1,6 +1,5 @@
 package com.jcourse.agolovenko.lesson5.HTMLGenerator.Collector;
 
-import com.jcourse.agolovenko.lesson5.HTMLGenerator.DataModel.DirectoryModel;
 import com.jcourse.agolovenko.lesson5.HTMLGenerator.DataModel.IDirectoryModel;
 import com.jcourse.agolovenko.lesson5.HTMLGenerator.DataModel.NodeInfo;
 
@@ -14,7 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DirectoryDataCollector implements ICollector {
@@ -48,7 +46,6 @@ public class DirectoryDataCollector implements ICollector {
 
     @Override
     public void inDirFirstOrder() {
-        String root = storage.getRoot();
         List<NodeInfo> sortedNodesList = Stream.concat(storage.getDirNodes().stream()
                         .filter(el -> !el.getIsFile())
                         .sorted(Comparator.comparing(NodeInfo::getNodeNameInLowerCase)),
