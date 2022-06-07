@@ -18,5 +18,5 @@ public class HTTPServerMain {
         IListener listener = new Listener(Executors.newFixedThreadPool(THREADS_AMOUNT), PORT, DIRECTORY);
         listener.listen();
     }
-    // TODO: 07.06.2022 Describe API in Swagger 
+    // TODO: 07.06.2022 Describe API in Swagger
 }

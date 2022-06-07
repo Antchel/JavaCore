@@ -51,7 +51,9 @@ public class HTTPResponse {
                 } else if (appType.equals("null")) {
                     response.append("Content-Type: application/octet-stream\r\n");
                 } else {
+                    String filePath = request.getTargetPath();
                     response.append("Content-Type: ").append(appType).append("\r\n");
+                    response.append("Last-Modified: ").append(new Date(new File(filePath).lastModified())).append("\r\n");
                     response.append("Content-Disposition: attachment; filename=").append(Path.of(request.getTargetPath()).getFileName()).append("\r\n\r\n");
                     try {
                         StringBuilder data = new StringBuilder();
