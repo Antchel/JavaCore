@@ -53,11 +53,11 @@ public class HTTPResponse {
         switch (request.getHTTPMethod()) {
             case "GET" -> {
                 response.append("HTTP/1.1 200 OK\r\n");
-                if (appType.isEmpty()) {
+                if (appType != null && appType.isEmpty()) {
                     addResponseHeaders();
                     response.append(writer);
 
-                } else if (appType.equals("null")) {
+                } else if (appType == null || appType.equals("null")) {
                     response.append("Content-Type: application/octet-stream\r\n");
                 } else {
                     String filePath = request.getTargetPath();

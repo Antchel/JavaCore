@@ -67,6 +67,12 @@
 <body>
          <h1 id="header"> $model.root </h1>
 
+        <h3>Show a file-select field which allows only one file to be chosen:</h3>
+        <form action="$model.root" method="post">
+          <label for="myfile">Select a file:</label>
+          <input type="file" id="myfile" name="myfile"><br><br>
+          <input type="submit">
+        </form>
          <table>
            <thead>
              <tr class="header" id="theader">
