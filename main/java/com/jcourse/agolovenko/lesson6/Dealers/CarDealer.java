@@ -2,6 +2,7 @@ package com.jcourse.agolovenko.lesson6.Dealers;
 
 import com.jcourse.agolovenko.lesson6.Configurator;
 import com.jcourse.agolovenko.lesson6.Details.Car;
+import com.jcourse.agolovenko.lesson6.Store.CarWarehouse;
 import com.jcourse.agolovenko.lesson6.Store.Store;
 import com.jcourse.agolovenko.lesson6.Worker.WarehouseController;
 import com.jcourse.agolovenko.lesson6.Worker.Task.Worker;
@@ -18,13 +19,13 @@ public class CarDealer implements Runnable {
 
     private final ScheduledExecutorService executor;
     private final long delay;
-    private Store<Car> carWarehouse;
+    private CarWarehouse carWarehouse;
     private final WarehouseController warehouseController;
     private final AtomicLong saledCarsAmont = new AtomicLong(0);
     private final Object monitor = new Object();
 
 
-    public CarDealer(WarehouseController warehouseController, Store<Car> carWarehouse, long delay) {
+    public CarDealer(WarehouseController warehouseController, CarWarehouse carWarehouse, long delay) {
         executor = Executors.newScheduledThreadPool(Configurator.getCarDealers());
         this.delay = delay;
         this.carWarehouse = carWarehouse;
@@ -35,7 +36,6 @@ public class CarDealer implements Runnable {
 
     private void sendCarRequest() {
         try {
-            carWarehouse.get(this);
             System.out.println("sendCarRequest");
             warehouseController.makeOrder();
         } catch (InterruptedException e) {
@@ -50,18 +50,14 @@ public class CarDealer implements Runnable {
     }
 
     Runnable task = () -> {
-        System.out.println("Scheduling: " + LocalTime.now());
-        System.out.println("Thread: " + Thread.currentThread());
-        try {
-            Car car = carWarehouse.get(this);
-            if (car == null) {
-                sendCarRequest();
-            }
-            else {
-                saledCarsAmont.incrementAndGet();
-            }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        System.out.println("Car- Seller Scheduling: " + LocalTime.now());
+        Car car = carWarehouse.getCarFromStore();
+        if (car == null) {
+            sendCarRequest();
+        }
+        else {
+            saledCarsAmont.incrementAndGet();
+            System.out.println("saledCarsAmont = " + saledCarsAmont);
         }
     };
 

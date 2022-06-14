@@ -8,21 +8,20 @@ import java.time.LocalTime;
 import java.util.concurrent.*;
 
 
-public class Vendor<T extends IStorageItem> implements Runnable {
+public class Vendor<T extends IStorageItem> {
 
-    private final Class<? extends IStorageItem> clazz;
+    private Class<? extends IStorageItem> clazz;
     private final ScheduledExecutorService executor;
     private final long delay;
     private final int poolSize;
     private Store<T> warehouse;
-    private final Object monitor = new Object();
 
     public Vendor(Class<? extends IStorageItem> clazz, Store<T> warehouse, long milliseconds, int poolSize) {
         this.clazz = clazz;
         this.delay = milliseconds;
         this.warehouse = warehouse;
         this.poolSize = poolSize;
-        executor = Executors.newScheduledThreadPool(poolSize);
+        executor = new ScheduledThreadPoolExecutor(poolSize);
     }
 
     private T createItem() throws InvocationTargetException, InstantiationException, IllegalAccessException {
@@ -31,17 +30,21 @@ public class Vendor<T extends IStorageItem> implements Runnable {
     }
 
     Runnable task = () -> {
-        System.out.println("Scheduling: " + LocalTime.now());
-        System.out.println("Thread: " + Thread.currentThread());
+//        System.out.println(clazz.getSimpleName() + " Product Vendor Scheduling: " + LocalTime.now());
+//        System.out.println("Thread: " + Thread.currentThread());
         try {
-            warehouse.put(this.createItem(), monitor);
+            warehouse.put(this.createItem());
         } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     };
 
-    @Override
-    public void run() {
+    public void runWithRate() {
+        for (int i = 0; i < poolSize; i++) {
+            executor.scheduleWithFixedDelay(task, 0, this.delay, TimeUnit.MILLISECONDS);
+        }
+    }
+    public void runWithRate(long delay) {
         for (int i = 0; i < poolSize; i++) {
             executor.scheduleWithFixedDelay(task, 0, delay, TimeUnit.MILLISECONDS);
         }
