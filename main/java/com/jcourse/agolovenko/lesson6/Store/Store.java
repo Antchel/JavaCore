@@ -23,8 +23,9 @@ public class Store<T extends IStorageItem> {
                 throw new RuntimeException(e);
             }
         }
+        notify();
         store.add(item);
-        System.out.println(this.getClass().getGenericSuperclass() + " Store has " + store.size() + " items!");
+//        System.out.println(this.getClass().getGenericSuperclass() + " Store has " + store.size() + " items!");
     }
 
     public synchronized T get() throws InterruptedException {

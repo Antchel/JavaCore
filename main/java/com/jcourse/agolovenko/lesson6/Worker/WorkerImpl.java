@@ -1,11 +1,12 @@
-package com.jcourse.agolovenko.lesson6.Worker.Task;
+package com.jcourse.agolovenko.lesson6.Worker;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class WorkerImpl extends Thread {
-    private final List<BuildCarTask> taskQueue;
+    private final CopyOnWriteArrayList<BuildCarTask> taskQueue;
 
-    public WorkerImpl(String name, List<BuildCarTask> taskQueue) {
+    public WorkerImpl(String name, CopyOnWriteArrayList<BuildCarTask> taskQueue) {
         super(name);
         this.taskQueue = taskQueue;
     }
@@ -13,7 +14,6 @@ public class WorkerImpl extends Thread {
     private void performTask(BuildCarTask t)
     {
         try {
-            System.out.println(Thread.currentThread().getName());
             t.buildCar();
         }
         catch (InterruptedException ex) {
@@ -41,6 +41,8 @@ public class WorkerImpl extends Thread {
                 else
                 {
                     toExecute = taskQueue.remove(0);
+
+                    System.out.println("taskQueue size is " + taskQueue.size());
                 }
             }
             performTask(toExecute);

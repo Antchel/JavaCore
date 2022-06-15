@@ -2,20 +2,24 @@ package com.jcourse.agolovenko.lesson6;
 
 import com.jcourse.agolovenko.lesson6.Dealers.CarDealer;
 import com.jcourse.agolovenko.lesson6.Details.Accessories;
-import com.jcourse.agolovenko.lesson6.Details.Car;
 import com.jcourse.agolovenko.lesson6.Details.CarBody;
 import com.jcourse.agolovenko.lesson6.Details.Engine;
 import com.jcourse.agolovenko.lesson6.Store.CarWarehouse;
 import com.jcourse.agolovenko.lesson6.Store.Store;
+import com.jcourse.agolovenko.lesson6.UI.CarFactory;
 import com.jcourse.agolovenko.lesson6.Vendors.Vendor;
-import com.jcourse.agolovenko.lesson6.Worker.WarehouseController;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 public class MainApp {
 
     public static void main(String[] args) throws IOException, InvocationTargetException, InstantiationException, IllegalAccessException, InterruptedException {
+
+        JFrame frame = new CarFactory("Fabrique");
+        frame.setVisible(true);
+
         // Init Item Warehouses
         Store<CarBody> carBodyStore = new Store<>(Configurator.getBodyWarehouseCapacity()){};
         Store<Engine> engineStore = new Store<>(Configurator.getEngineWarehouseCapacity()){};

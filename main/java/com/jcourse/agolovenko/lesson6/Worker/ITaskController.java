@@ -1,4 +1,4 @@
-package com.jcourse.agolovenko.lesson6.Worker.Task;
+package com.jcourse.agolovenko.lesson6.Worker;
 
 public interface ITaskController {
     void taskInterrupted(Task t);

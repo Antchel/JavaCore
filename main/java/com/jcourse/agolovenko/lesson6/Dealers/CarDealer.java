@@ -3,13 +3,11 @@ package com.jcourse.agolovenko.lesson6.Dealers;
 import com.jcourse.agolovenko.lesson6.Configurator;
 import com.jcourse.agolovenko.lesson6.Details.Car;
 import com.jcourse.agolovenko.lesson6.Store.CarWarehouse;
-import com.jcourse.agolovenko.lesson6.Store.Store;
-import com.jcourse.agolovenko.lesson6.Worker.WarehouseController;
-import com.jcourse.agolovenko.lesson6.Worker.Task.Worker;
+import com.jcourse.agolovenko.lesson6.WarehouseController;
+import com.jcourse.agolovenko.lesson6.Worker.Worker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -50,7 +48,7 @@ public class CarDealer implements Runnable {
     }
 
     Runnable task = () -> {
-        System.out.println("Car- Seller Scheduling: " + LocalTime.now());
+//        System.out.println("Car- Seller Scheduling: " + LocalTime.now());
         Car car = carWarehouse.getCarFromStore();
         if (car == null) {
             sendCarRequest();

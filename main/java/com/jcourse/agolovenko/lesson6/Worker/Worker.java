@@ -1,4 +1,4 @@
-package com.jcourse.agolovenko.lesson6.Worker.Task;
+package com.jcourse.agolovenko.lesson6.Worker;
 
 import com.jcourse.agolovenko.lesson6.Details.Accessories;
 import com.jcourse.agolovenko.lesson6.Details.Car;

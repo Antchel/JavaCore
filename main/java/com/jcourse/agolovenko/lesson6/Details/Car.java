@@ -20,15 +20,4 @@ public class Car implements IStorageItem {
         return serialNumber;
     }
 
-    public CarBody getCarBody() {
-        return carBody;
-    }
-
-    public Accessories getAccessories() {
-        return accessories;
-    }
-
-    public Engine getEngine() {
-        return engine;
-    }
 }
