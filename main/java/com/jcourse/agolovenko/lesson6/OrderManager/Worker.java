@@ -1,4 +1,4 @@
-package com.jcourse.agolovenko.lesson6.Worker;
+package com.jcourse.agolovenko.lesson6.OrderManager;
 
 import com.jcourse.agolovenko.lesson6.Details.Accessories;
 import com.jcourse.agolovenko.lesson6.Details.Car;
@@ -13,9 +13,6 @@ public class Worker implements Task {
     private final Store<Engine> engineStore;
     private final CarWarehouse carStore;
     private Car car = null;
-    private  CarBody carBody = null;
-    private Engine engine = null;
-    private Accessories accessories = null;
 
     public Worker(Store<Accessories> accessoriesStore,
                   Store<CarBody> carBodyStore,
@@ -27,23 +24,23 @@ public class Worker implements Task {
         this.carStore = carStore;
     }
 
-    private void buildCar() throws InterruptedException {
-        carBody = this.carBodyStore.get();
-        engine = this.engineStore.get();
-        accessories = this.accessoriesStore.get();
-        car = new Car(carBody,accessories,engine);
+    private void buildCar() {
+        CarBody carBody = this.carBodyStore.get();
+        Engine engine = this.engineStore.get();
+        Accessories accessories = this.accessoriesStore.get();
+        car = new Car(carBody, accessories, engine);
     }
 
     public void moveCarToWarehouse(){
         try {
             carStore.putCar(car);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
         }
     }
 
     @Override
-    public void performWork() throws InterruptedException {
+    public void performWork() {
         buildCar();
         moveCarToWarehouse();
     }

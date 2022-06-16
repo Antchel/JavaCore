@@ -1,4 +1,4 @@
-package com.jcourse.agolovenko.lesson6.Worker;
+package com.jcourse.agolovenko.lesson6.OrderManager;
 
 public class BuildCarTask {
     private final ITaskController controller;

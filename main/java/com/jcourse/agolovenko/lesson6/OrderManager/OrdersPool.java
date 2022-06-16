@@ -1,36 +1,39 @@
-package com.jcourse.agolovenko.lesson6.Worker;
+package com.jcourse.agolovenko.lesson6.OrderManager;
 
 import com.jcourse.agolovenko.lesson6.Configurator;
 
+import javax.swing.*;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class ThreadPool implements ITaskController {
+public class OrdersPool implements ITaskController {
 
     private static final int WORKERS_COUNT = Configurator.getWorkers();
     private final CopyOnWriteArrayList<BuildCarTask> taskQueue = new CopyOnWriteArrayList<>(new LinkedList<>());
-//    private final List<BuildCarTask> taskQueue = new LinkedList<>();
+    private final JLabel label;
     private Set<? super Thread> availableThreads = new HashSet<>();
 
     @Override
     public void taskInterrupted(Task t) {
-        // TODO: 14.06.2022 Implement correct threads interrupting
+        Thread.currentThread().interrupt();
     }
 
-    public void addTask(Task t) {
-        addTask(t, this);
+    public void assignTaskToWorker(Task t) {
+        assignTaskToWorker(t, this);
     }
 
-    public void addTask(Task t, ITaskController l) {
+    public void assignTaskToWorker(Task t, ITaskController l) {
         synchronized (taskQueue) {
             taskQueue.add(new BuildCarTask(t, l));
+            if (label != null) label.setText(String.valueOf(taskQueue.size()));
             taskQueue.notify();
         }
     }
 
-    public ThreadPool() {
+    public OrdersPool(JLabel label) {
+        this.label = label;
         for (int i = 0; i < WORKERS_COUNT; i++) {
-            availableThreads.add(new WorkerImpl("Worker_" + i, taskQueue));
+            availableThreads.add(new Order(taskQueue, label));
         }
         for (Object availableThread : availableThreads) {
             ((Thread) availableThread).start();

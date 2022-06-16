@@ -1,14 +1,15 @@
-package com.jcourse.agolovenko.lesson6.Worker;
+package com.jcourse.agolovenko.lesson6.OrderManager;
 
-import java.util.List;
+import javax.swing.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class WorkerImpl extends Thread {
+public class Order extends Thread {
     private final CopyOnWriteArrayList<BuildCarTask> taskQueue;
+    private final JLabel label;
 
-    public WorkerImpl(String name, CopyOnWriteArrayList<BuildCarTask> taskQueue) {
-        super(name);
+    public Order(CopyOnWriteArrayList<BuildCarTask> taskQueue, JLabel label) {
         this.taskQueue = taskQueue;
+        this.label = label;
     }
 
     private void performTask(BuildCarTask t)
@@ -30,19 +31,19 @@ public class WorkerImpl extends Thread {
             {
                 if (taskQueue.isEmpty())
                 {
+                    if (label != null)  label.setText("0");
                     try {
                         taskQueue.wait();
                     }
                     catch (InterruptedException ex) {
-                        System.err.println("Thread was inetrrupted:"+getName());
+                        Thread.currentThread().interrupt();
                     }
                     continue;
                 }
                 else
                 {
                     toExecute = taskQueue.remove(0);
-
-                    System.out.println("taskQueue size is " + taskQueue.size());
+                    if (label != null) label.setText(String.valueOf(taskQueue.size()));
                 }
             }
             performTask(toExecute);
