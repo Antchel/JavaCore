@@ -1,50 +1,50 @@
 package com.jcourse.agolovenko.lesson6.OrderManager;
 
-import javax.swing.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class Order extends Thread {
+public class Order implements Runnable {
     private final CopyOnWriteArrayList<BuildCarTask> taskQueue;
-    private final JLabel label;
+//    private final JLabel label;
+    private Set<IValueChangedListener> listeners = new HashSet<>();
 
-    public Order(CopyOnWriteArrayList<BuildCarTask> taskQueue, JLabel label) {
+    public Order(CopyOnWriteArrayList<BuildCarTask> taskQueue) {
         this.taskQueue = taskQueue;
-        this.label = label;
     }
 
-    private void performTask(BuildCarTask t)
-    {
+    public void addListener(IValueChangedListener listener){
+        listeners.add(listener);
+    }
+
+    private void performTask(BuildCarTask t) {
         try {
             t.buildCar();
-        }
-        catch (InterruptedException ex) {
+        } catch (InterruptedException ex) {
             t.interrupted();
         }
     }
 
-    public void run()
-    {
+    private void notifyListeners(){
+        listeners.forEach(l -> l.valueChanged(taskQueue.size()));
+    }
+
+    @Override
+    public void run() {
         BuildCarTask toExecute;
-        while (true)
-        {
-            synchronized (taskQueue)
-            {
-                if (taskQueue.isEmpty())
-                {
-                    if (label != null)  label.setText("0");
+        while (true) {
+            synchronized (taskQueue) {
+                if (taskQueue.isEmpty()) {
                     try {
                         taskQueue.wait();
-                    }
-                    catch (InterruptedException ex) {
+                    } catch (InterruptedException ex) {
                         Thread.currentThread().interrupt();
                     }
                     continue;
-                }
-                else
-                {
+                } else {
                     toExecute = taskQueue.remove(0);
-                    if (label != null) label.setText(String.valueOf(taskQueue.size()));
                 }
+                notifyListeners();
             }
             performTask(toExecute);
         }

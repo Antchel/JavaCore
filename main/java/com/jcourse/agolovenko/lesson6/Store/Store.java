@@ -1,56 +1,67 @@
 package com.jcourse.agolovenko.lesson6.Store;
 
 import com.jcourse.agolovenko.lesson6.Details.IStorageItem;
+import com.jcourse.agolovenko.lesson6.OrderManager.IValueChangedListener;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Store<T extends IStorageItem> {
     private final List<T> store;
-    private JLabel label = null;
-
     private final int storeSize;
+    private final List<Object> vendorMonitors = Collections.synchronizedList(new ArrayList<>());
+    private final Set<IValueChangedListener> productsCountListeners = Collections.synchronizedSet(new HashSet<>());
 
     public Store(int storeSize) {
         this.storeSize = storeSize;
-        store = Collections.synchronizedList(new ArrayList<>());
-    }
-    public Store(int storeSize, JLabel label) {
-        this(storeSize);
-        this.label = label;
+        store = new CopyOnWriteArrayList<>();
     }
 
-    public synchronized void put(T item) {
+    public void put(T item, Object monitor) {
         if (store.size() == storeSize) {
-            label.setText(String.valueOf(store.size()));
+            productsCountListeners.forEach(l -> l.valueChanged(store.size()));
             try {
-                wait();
+                vendorMonitors.add(monitor);
+                synchronized (monitor) {
+                    monitor.wait();
+                }
+
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }
-        notify();
+
         store.add(item);
-        label.setText(String.valueOf(store.size()));
+        synchronized (this) {
+            notify();
+        }
+
+        productsCountListeners.forEach(l -> l.valueChanged(store.size()));
     }
 
     public synchronized T get() {
         if (store.isEmpty()) {
-            label.setText(String.valueOf(0));
+            productsCountListeners.forEach(l -> l.valueChanged(store.size()));
             try {
                 wait();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-            return null;
+            return get();
         } else {
             T item = store.remove(0);
-            notify();
-            label.setText(String.valueOf(store.size()));
+            if (!vendorMonitors.isEmpty()) {
+                synchronized (vendorMonitors.get(0)) {
+                    vendorMonitors.remove(0).notifyAll();
+                }
+            }
+            productsCountListeners.forEach(l -> l.valueChanged(store.size()));
             return item;
         }
     }
 
+    public void addListener(IValueChangedListener listener) {
+        productsCountListeners.add(listener);
+    }
 }

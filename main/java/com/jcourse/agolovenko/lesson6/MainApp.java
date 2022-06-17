@@ -29,11 +29,16 @@ public class MainApp {
         frame.setVisible(true);
 
         // Init Item Warehouses
-        Store<CarBody> carBodyStore = new Store<>(Configurator.getBodyWarehouseCapacity(), carFactory.CarBodyStore){};
-        Store<Engine> engineStore = new Store<>(Configurator.getEngineWarehouseCapacity(),carFactory.EngineStore){};
-        Store<Accessories> accessoriesStore = new Store<>(Configurator.getAccessoryWarehouseCapacity(), carFactory.AccessoriesStore){};
+        Store<CarBody> carBodyStore = new Store<>(Configurator.getBodyWarehouseCapacity()){};
+        carBodyStore.addListener(value -> carFactory.CarBodyStore.setText(Integer.toString(value)));
+        Store<Engine> engineStore = new Store<>(Configurator.getEngineWarehouseCapacity()){};
+        engineStore.addListener(value -> carFactory.EngineStore.setText(Integer.toString(value)));
+        Store<Accessories> accessoriesStore = new Store<>(Configurator.getAccessoryWarehouseCapacity()){};
+        accessoriesStore.addListener(value -> carFactory.AccessoriesStore.setText(Integer.toString(value)));
         // Init Car warehouse
-        CarWarehouse carStore = new CarWarehouse(Configurator.getStorageAutoSize(), carFactory.CarsStore);
+        CarWarehouse carStore = new CarWarehouse(Configurator.getStorageAutoSize());
+        carStore.addListener(value -> carFactory.CarsStore.setText(Integer.toString(value)));
+
         // Init Item Producers
         Vendor<CarBody> carBodyVendor = new Vendor<>(CarBody.class, carBodyStore , 1, carFactory.TotalCarBodyProduced);
         Vendor<Engine> engineVendor = new Vendor<>(Engine.class, engineStore, 1, carFactory.TotalEnginesProduced);

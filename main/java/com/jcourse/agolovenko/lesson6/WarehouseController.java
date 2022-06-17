@@ -26,7 +26,8 @@ public class WarehouseController {
         this.accessoriesStore = accessoriesStore;
         this.carBodyStore = carBodyStore;
         this.engineStore = engineStore;
-        threadPool = new OrdersPool(label);
+        threadPool = new OrdersPool();
+        threadPool.addListener(value -> label.setText(Integer.toString(value)));
     }
 
     public void makeOrder() throws InterruptedException {

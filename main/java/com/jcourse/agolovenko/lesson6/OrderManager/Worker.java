@@ -12,7 +12,6 @@ public class Worker implements Task {
     private final Store<CarBody> carBodyStore;
     private final Store<Engine> engineStore;
     private final CarWarehouse carStore;
-    private Car car = null;
 
     public Worker(Store<Accessories> accessoriesStore,
                   Store<CarBody> carBodyStore,
@@ -24,24 +23,24 @@ public class Worker implements Task {
         this.carStore = carStore;
     }
 
-    private void buildCar() {
+    private synchronized Car buildCar() {
         CarBody carBody = this.carBodyStore.get();
         Engine engine = this.engineStore.get();
         Accessories accessories = this.accessoriesStore.get();
-        car = new Car(carBody, accessories, engine);
+        return new Car(carBody, accessories, engine);
     }
 
-    public void moveCarToWarehouse(){
+    public void moveCarToWarehouse(Car car){
         try {
-            carStore.putCar(car);
+            if (car != null)
+                carStore.putCar(car);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
     }
 
     @Override
-    public void performWork() {
-        buildCar();
-        moveCarToWarehouse();
+    public synchronized void performWork() {
+        moveCarToWarehouse(buildCar());
     }
 }

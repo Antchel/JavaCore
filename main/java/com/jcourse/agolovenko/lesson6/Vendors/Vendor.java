@@ -18,7 +18,6 @@ public class Vendor<T extends IStorageItem> {
     private final int poolSize;
     JLabel label = null;
 
-
     private final AtomicLong producedItems = new AtomicLong(0);
     private Store<T> warehouse;
 
@@ -33,20 +32,17 @@ public class Vendor<T extends IStorageItem> {
         this.label = label;
     }
 
-    private T createItem() throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    private synchronized T createItem() throws InvocationTargetException, InstantiationException, IllegalAccessException {
         producedItems.incrementAndGet();
         if (label != null)
             label.setText(String.valueOf(producedItems));
         return (T) (clazz.getDeclaredConstructors()[0]).newInstance();
     }
 
-    public AtomicLong getProducedItems() {
-        return producedItems;
-    }
-
     Runnable task = () -> {
+        Object monitor = new Object();
         try {
-            warehouse.put(this.createItem());
+            warehouse.put(this.createItem(), monitor);
         } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
