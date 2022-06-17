@@ -80,10 +80,10 @@
             #foreach( $node in $model.dirNodes )
              <tr>
                 #if( !$node.isFile )
-                    <td data-value="$node.nodeName"><a class="icon dir" href="$node.nodePath" </a> $node.nodeName </td>
+                    <td data-value="$node.nodeName"><a class="icon dir" href="$node.nodePath"> $node.nodeName </a> </td>
                     <td class="detailsColumn" data-value="0"></td>
                 #else
-                    <td data-value="$node.nodeName"><a class="icon file" href="$node.nodePath"</a> $node.nodeName </td>
+                    <td data-value="$node.nodeName"><a class="icon file" href="$node.nodePath"> $node.nodeName </a></td>
                     <td class="detailsColumn" data-value="$node.size"> $node.size Bytes</td>
                 #end
                 <td class="detailsColumn" data-value="$node.date"> $node.date </td>

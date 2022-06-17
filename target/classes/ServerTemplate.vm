@@ -60,7 +60,10 @@
 
         </style>
 
-<head><title> Directory info - $model.root</title></head>
+<head>
+    <title> Directory info - $model.root</title>
+    <link rel="icon" href="data:,">
+</head>
 <body>
          <h1 id="header"> $model.root </h1>
 
@@ -80,10 +83,10 @@
             #foreach( $node in $model.dirNodes )
              <tr>
                 #if( !$node.isFile )
-                    <td data-value="$node.nodeName"><a class="icon dir" href="$node.nodePath"> $node.nodeName </a> </td>
+                    <td data-value="$node.nodeName"><a class="icon dir" href="http://localhost:8085/$node.nodePath"> $node.nodeName </a> </td>
                     <td class="detailsColumn" data-value="0"></td>
                 #else
-                    <td data-value="$node.nodeName"><a class="icon file" href="$node.nodePath"> $node.nodeName </a></td>
+                    <td data-value="$node.nodeName"><a class="icon file" href="http://localhost:8085/$node.nodePath"> $node.nodeName </a></td>
                     <td class="detailsColumn" data-value="$node.size"> $node.size Bytes</td>
                 #end
                 <td class="detailsColumn" data-value="$node.date"> $node.date </td>
