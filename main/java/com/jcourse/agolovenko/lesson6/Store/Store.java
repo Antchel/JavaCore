@@ -19,7 +19,7 @@ public class Store<T extends IStorageItem> {
     }
 
     public void put(T item, Object monitor) {
-        if (store.size() == storeSize) {
+        if (store.size() >= storeSize) {
             productsCountListeners.forEach(l -> l.valueChanged(store.size()));
             try {
                 vendorMonitors.add(monitor);

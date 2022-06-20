@@ -13,8 +13,8 @@ public class Order implements Runnable {
         this.taskQueue = taskQueue;
     }
 
-    public void addListener(IValueChangedListener listener){
-        listeners.add(listener);
+    public void addListeners(Set<IValueChangedListener> listeners){
+        this.listeners = listeners;
     }
 
     private void performTask(BuildCarTask t) {
@@ -36,6 +36,7 @@ public class Order implements Runnable {
             synchronized (taskQueue) {
                 if (taskQueue.isEmpty()) {
                     try {
+                        notifyListeners();
                         taskQueue.wait();
                     } catch (InterruptedException ex) {
                         Thread.currentThread().interrupt();
@@ -43,6 +44,7 @@ public class Order implements Runnable {
                     continue;
                 } else {
                     toExecute = taskQueue.remove(0);
+                    notifyListeners();
                 }
                 notifyListeners();
             }

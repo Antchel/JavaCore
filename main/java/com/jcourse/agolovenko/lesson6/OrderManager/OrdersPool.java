@@ -2,6 +2,7 @@ package com.jcourse.agolovenko.lesson6.OrderManager;
 
 import com.jcourse.agolovenko.lesson6.Configurator;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
@@ -33,6 +34,7 @@ public class OrdersPool implements ITaskController {
     public OrdersPool() {
         for (int i = 0; i < WORKERS_COUNT; i++) {
             Order order = new Order(taskQueue);
+            order.addListeners(listeners);
             Thread workerThread = new Thread(order);
             workerThread.start();
         }
